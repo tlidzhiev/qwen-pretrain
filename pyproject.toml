@@ -1,0 +1,29 @@
+[project]
+name = "qwen-pretrain"
+version = "0.1.0"
+description = "Pretrain Qwen-1B model on Russian wikipedia dataset"
+readme = "README.md"
+requires-python = "==3.12.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "ipykernel==7.3.0",
+    "ipywidgets==8.1.9",
+    "jupyter==1.1.1",
+    "pre-commit==4.6.2",
+    "ruff==0.16.9",
+    "ty==0.0.84",
+]
+
+[tool.uv]
+package = true
+
+[tool.setuptools]
+packages = ["src"]
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.ruff]
+line-length = 100
