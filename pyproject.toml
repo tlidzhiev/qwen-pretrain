@@ -4,7 +4,15 @@ version = "0.1.0"
 description = "Pretrain Qwen-1B model on Russian wikipedia dataset"
 readme = "README.md"
 requires-python = "==3.12.11"
-dependencies = []
+dependencies = [
+    "accelerate==1.15.0",
+    "comet-ml==3.58.7",
+    "datasets==5.0.1",
+    "hydra-core==1.3.7",
+    "kernels==0.17.2",
+    "torch==2.14.1",
+    "transformers==5.18.0",
+]
 
 [dependency-groups]
 dev = [

@@ -1,0 +1,72 @@
+defaults:
+  - model: qwen3_tiny
+  - dataset: wikipedia_tiny
+  - _self_
+
+max_training_time_seconds: 900
+
+writer:
+  project_name: qwen-pretrain
+  mode: online
+  run_name: qwen3-1b-wikipedia-ru
+  log_assets: false
+  log_dir: logs/${writer.project_name}/${writer.run_name}
+
+generation:
+  prompts:
+    - 'Москва — столица'
+    - 'Александр Сергеевич Пушкин родился'
+  max_new_tokens: null
+  do_sample: null
+  temperature: null
+  top_p: null
+  repetition_penalty: null
+
+training_args:
+  # Run
+  output_dir: ${writer.log_dir}/gpt2-1b-russian
+  run_name: ${writer.run_name}
+  seed: 42
+
+  # Steps and batch size
+  # Training is cut by TimeoutCallback after 15 minutes, so the LR schedule is defined
+  # over the number of steps that fit in that budget rather than a full epoch.
+  # Tune max_steps to the measured throughput of the target GPU.
+  max_steps: 1500
+  per_device_train_batch_size: 16
+  per_device_eval_batch_size: 32
+  gradient_accumulation_steps: 2
+
+  # Optimizer
+  optim: adamw_torch
+  learning_rate: 0.001
+  weight_decay: 0.1
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  max_grad_norm: 1.0
+
+  # LR schedule
+  lr_scheduler_type: cosine_with_min_lr
+  lr_scheduler_kwargs:
+    min_lr_rate: 0.1
+  warmup_steps: 200
+
+  # Evaluation and checkpointing
+  # They eat into the time budget, so do them rarely.
+  eval_strategy: steps
+  eval_steps: 250
+  save_steps: 250
+  save_total_limit: 2
+  load_best_model_at_end: true
+  metric_for_best_model: eval_loss
+
+  # Logging
+  logging_steps: 10
+  report_to: comet_ml
+
+  # Performance
+  bf16: true
+  tf32: true
+  torch_compile: true
+  gradient_checkpointing: false
+  dataloader_num_workers: 4

@@ -1,0 +1,9 @@
+path: wikimedia/wikipedia
+name: 20231101.ru
+split: train
+num_samples: null
+tokenizer_name: ai-forever/rugpt3small_based_on_gpt2
+data_dir: ./data/wikipedia
+max_length: 512
+num_shards: 32
+validation_size: 5000
